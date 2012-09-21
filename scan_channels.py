@@ -51,10 +51,6 @@ if 0 > ch_min or 0 > ch_max or ch_min > ch_max:
 #carrier frequency offset
 freq_offset_kHz = freq_offset_set_kHz[idx]
 
-#show summary
-print("Scanning DVB-T channels from "+str(ch_min)+" to "+str(ch_max))
-print("Carrier frequency offset "+str(freq_offset_kHz)+" kHz")
-
 #generate channels
 raw_channels_file_name = "raw_channels-"+options.location+".txt"
 fd = open(raw_channels_file_name, "w")
@@ -67,6 +63,16 @@ for idx2 in range(0, len(fec_up)):
 fd.close()
 
 #scan channels
-fd = open("channels-"+options.location+".conf", "w")
+fd = open("channels-"+options.location+".conf", "w+")
 call(["scan", "-q", raw_channels_file_name], stdout=fd)
+
+#count the number of lines (number of channels found)
+nb_ch = 0
+for line in fd:
+  nb_ch + nb_ch+1
 fd.close()
+
+#show summary
+print("Scanning DVB-T channels from "+str(ch_min)+" to "+str(ch_max))
+print("Carrier frequency offset "+str(freq_offset_kHz)+" kHz")
+print("Found "+str(nb_ch)+" channels")
