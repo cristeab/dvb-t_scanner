@@ -1,13 +1,37 @@
 #!/usr/bin/env python
 
-#Brief: Scans DVB-T channels in order to find the available stations for a specific location
-#Author: Bogdan Cristea
+# Brief: Scans DVB-T channels in order to find the available stations for a specific location
+# Author: Bogdan Cristea
 
-#Uses 'scan' utility which must be in the system path. The scan utility receives as input a text file,
-#so that on each line a DVB-T channel is defined.
-#Each DVB-T channel is defined by the following parameters:
-#T 474166000 8MHz 2/3 NONE QAM64 8k 1/32 NONE
-#The output represents the detected DVB-T stations and can be used as input to VLC, for example.
+# Usage: ./scan_channels.py -l <location>
+
+# Uses scan utility (http://www.linuxtv.org/wiki/index.php/LinuxTV_dvb-apps) which must be
+# installed in your system path (most Linux distribution package already this utility).
+# The script creates a text file
+#  channels-<location>.conf
+# which can be opened with VLC, for example, to watch the available DVB-T channels.
+# It creates also an intermediate text file
+#  raw_channels-<location>.txt
+# with all channels to be scanned. This file can be used later to redo the scan with the command
+#  scan raw_channels-<location>.txt
+# Each line in the intermediate file represents a DVB-T channel to scan and has the format
+# T 474166000 8MHz 2/3 NONE QAM64 8k 1/32 NONE
+#
+# ------------------------------------------------------------------------------------------
+#
+# Copyright (C) 2012 Bogdan Cristea
+#
+# You can redistribute and/or modify this script under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any
+# later version.
+#
+# This script is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+# details (<http://www.gnu.org/licenses/>).
+#
+# ------------------------------------------------------------------------------------------
 
 from optparse import OptionParser
 from subprocess import Popen, PIPE
@@ -52,7 +76,7 @@ if 0 > ch_min or 0 > ch_max or ch_min > ch_max:
 #carrier frequency offset
 freq_offset_kHz = freq_offset_set_kHz[idx]
 
-#generate channels
+#generate raw channels
 raw_channels_file_name = "raw_channels-"+options.location+".txt"
 fd = open(raw_channels_file_name, "w")
 for idx2 in range(0, len(fec_up)):
@@ -78,7 +102,7 @@ for line in iter(proc.stderr.readline,''):
     stdout.write("\r[{0}] {1}%".format('#'*(progress/5), progress))
 stdout.write('\n')
 
-#count the number of lines (number of channels found)
+#get the list of found channels
 fd.seek(0)
 ch_list = []
 for line in fd:
