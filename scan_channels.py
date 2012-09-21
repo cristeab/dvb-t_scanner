@@ -67,9 +67,10 @@ fd = open("channels-"+options.location+".conf", "w+")
 call(["scan", "-q", raw_channels_file_name], stdout=fd)
 
 #count the number of lines (number of channels found)
+fd.seek(0)
 nb_ch = 0
 for line in fd:
-  nb_ch + nb_ch+1
+  nb_ch = nb_ch+1
 fd.close()
 
 #show summary
