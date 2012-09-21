@@ -80,14 +80,16 @@ stdout.write('\n')
 
 #count the number of lines (number of channels found)
 fd.seek(0)
-nb_ch = 0
+ch_list = []
 for line in fd:
-  nb_ch = nb_ch+1
+  ch_list.append(line.split(':')[0])
 fd.close()
 
 #show summary
 print('*'*40)
 print("Scanned DVB-T channels from "+str(ch_min)+" to "+str(ch_max))
 print("Carrier frequency offset "+str(freq_offset_kHz)+" kHz")
-print("Found "+str(nb_ch)+" channels")
+print("Found "+str(len(ch_list))+" channels")
+for i in range(0, len(ch_list)):
+  print("#"+str(i+1)+"\t"+ch_list[i])
 print('*'*40)
