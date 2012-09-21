@@ -56,7 +56,8 @@ print("Scanning DVB-T channels from "+str(ch_min)+" to "+str(ch_max))
 print("Carrier frequency offset "+str(freq_offset_kHz)+" kHz")
 
 #generate channels
-fd = open("raw_channels_"+options.location+".txt", "w")
+raw_channels_file_name = "raw_channels-"+options.location+".txt"
+fd = open(raw_channels_file_name, "w")
 for idx2 in range(0, len(fec_up)):
     for ch_no in range(ch_min, ch_max+1):
         freq_MHz = 8*ch_no+306
@@ -66,3 +67,6 @@ for idx2 in range(0, len(fec_up)):
 fd.close()
 
 #scan channels
+fd = open("channels-"+options.location+".conf", "w")
+call(["scan", "-q", raw_channels_file_name], stdout=fd)
+fd.close()
