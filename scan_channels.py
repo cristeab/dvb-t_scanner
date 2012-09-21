@@ -10,8 +10,9 @@
 #The output represents the detected DVB-T stations and can be used as input to VLC, for example.
 
 from optparse import OptionParser
-from subprocess import call
+from subprocess import Popen, PIPE
 from sys import exit
+from sys import stdout
 
 #set input options
 parser = OptionParser()
@@ -64,7 +65,18 @@ fd.close()
 
 #scan channels
 fd = open("channels-"+options.location+".conf", "w+")
-call(["scan", "-q", raw_channels_file_name], stdout=fd)
+#call(["scan", "-q", raw_channels_file_name], stdout=fd)
+proc = Popen(["scan", "-q", raw_channels_file_name], stdout=fd, stderr=PIPE)
+
+#display progress
+total_lines = 2*len(fec_up)*(ch_max-ch_min+1)
+line_nb = 0
+for line in iter(proc.stderr.readline,''):
+  if "tune to:" in line:
+    line_nb = line_nb+1
+    progress = 100*line_nb/total_lines
+    stdout.write("\r[{0}] {1}%".format('#'*(progress/5), progress))
+stdout.write('\n')
 
 #count the number of lines (number of channels found)
 fd.seek(0)
@@ -74,6 +86,8 @@ for line in fd:
 fd.close()
 
 #show summary
-print("Scanning DVB-T channels from "+str(ch_min)+" to "+str(ch_max))
+print('*'*40)
+print("Scanned DVB-T channels from "+str(ch_min)+" to "+str(ch_max))
 print("Carrier frequency offset "+str(freq_offset_kHz)+" kHz")
 print("Found "+str(nb_ch)+" channels")
+print('*'*40)
