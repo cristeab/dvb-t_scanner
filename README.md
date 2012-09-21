@@ -1,4 +1,5 @@
 dvb-t_scanner
 =============
 
-Scans the DVB-T channels for existing stations
+Scans DVB-T channels in order to find the available stations for a specific location
+
