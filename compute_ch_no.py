@@ -5,7 +5,7 @@
 ch_min = 21
 ch_max = 69
 freq_shift_kHz = (-166, 166, 332, 498)
-idx = 1 #doesn't need to be changed 
+idx = 1 #doesn't need to be changed (default 1)
 fec_up = (2, 3)
 fec_low = (3, 4)
 guard_up = (1, 1)
