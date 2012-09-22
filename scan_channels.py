@@ -6,7 +6,7 @@
 # Usage: ./scan_channels.py -l <location>
 
 # Uses scan utility (http://www.linuxtv.org/wiki/index.php/LinuxTV_dvb-apps) which must be
-# installed in your system path (most Linux distribution package already this utility).
+# installed in your system path (most Linux distributions package already this utility).
 # The script creates a text file
 #  channels-<location>.conf
 # which can be opened with VLC, for example, to watch the available DVB-T channels.
@@ -35,8 +35,10 @@
 
 from optparse import OptionParser
 from subprocess import Popen, PIPE
-from sys import exit
-from sys import stdout
+from sys import exit, stdout
+
+def disp_progress(progress):
+    stdout.write("\r[{0}] {1}%".format('#'*(progress/5), progress))
 
 #set input options
 parser = OptionParser()
@@ -98,8 +100,8 @@ line_nb = 0
 for line in iter(proc.stderr.readline,''):
   if "tune to:" in line:
     line_nb = line_nb+1
-    progress = 100*line_nb/total_lines
-    stdout.write("\r[{0}] {1}%".format('#'*(progress/5), progress))
+    disp_progress(100*line_nb/total_lines)
+disp_progress(100)
 stdout.write('\n')
 
 #get the list of found channels
