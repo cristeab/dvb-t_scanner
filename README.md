@@ -5,7 +5,8 @@ Scans DVB-T channels in order to find the available stations for a specific loca
 
 Usage: ./scan_channels.py -l \<location\>
 
-Uses scan utility from http://www.linuxtv.org/wiki/index.php/LinuxTV_dvb-apps.
+Uses scan utility from http://www.linuxtv.org/wiki/index.php/LinuxTV_dvb-apps. In order to install the latest drivers for your 
+DVB-T tunner on Linux please use the instructions provided at: http://git.linuxtv.org/media_build.git
 
 The script creates a text file
 
